@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/components/button.dart';
 import 'package:flutter_application_1/components/custom_appbar.dart';
+import 'package:flutter_application_1/main.dart';
+import 'package:flutter_application_1/models/booking_datetime_converted.dart';
+import 'package:flutter_application_1/providers/dio_provider.dart';
 import 'package:flutter_application_1/utils/config.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -28,8 +31,9 @@ class _BookingPageState extends State<BookingPage> {
   }
   @override
   void initState() {
+      super.initState();
     getToken();
-    super.initState();
+  
   }
   @override
   Widget build(BuildContext context) {
@@ -110,8 +114,15 @@ class _BookingPageState extends State<BookingPage> {
          SliverToBoxAdapter(
           child: Container( 
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 80),
-            child: Button(width: double.infinity, title: 'Make Appointment', onPressed: () {
-              Navigator.of(context).pushNamed('success_booking');
+            child: Button(width: double.infinity, title: 'Make Appointment', onPressed: () async {
+              final getDate = DateConverted.getDate(_currentDay);
+              final getDay = DateConverted.getDay(_currentDay.weekday);
+              final getTime = DateConverted.getTime(_currentIndex!);
+              final booking  = await DioProvider().bookAppointment(getDate,getDay,getTime,doctor['doctor_id'], token!);
+              if(booking == 200) {
+               MyApp.navigatorKey.currentState!.pushNamed('success_booking');
+              }
+              
             }, disable: _timeSelected && _dateSelected ? false : true)
           )
          )

@@ -86,7 +86,7 @@ class _SignUpFormState extends State<SignUpForm> {
                   if(userRegistration) {
                    final token  = await DioProvider().getToken(_emailController.text, _passController.text);
                   if(token) {
-                    auth.loginSuccess();
+                  /*   auth.loginSuccess(); */
                    MyApp.navigatorKey.currentState!.pushNamed('main');
                   }
                   } else {

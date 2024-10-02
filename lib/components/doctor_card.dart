@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/main.dart';
+import 'package:flutter_application_1/screens/doctor_details.dart';
 import 'package:flutter_application_1/utils/config.dart';
 
 class DoctorCard extends StatelessWidget {
-  const DoctorCard({super.key, required this.route, required this.doctor});
+  const DoctorCard({super.key,  required this.doctor, required this.isFav});
 
- final String route;
+
  final Map<String, dynamic> doctor;
+ final bool isFav;
 
 
   @override
@@ -62,7 +65,10 @@ class DoctorCard extends StatelessWidget {
             )
             ),
             onTap: () {
-              Navigator.of(context).pushNamed(route, arguments: doctor);
+              MyApp.navigatorKey.currentState!.push(MaterialPageRoute(builder: (_) => DoctorDetails(
+                doctor: doctor,
+                isFav: isFav,
+              )));
             },
       ),
     );

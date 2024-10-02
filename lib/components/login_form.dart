@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/components/button.dart';
 import 'package:flutter_application_1/main.dart';
@@ -5,10 +7,10 @@ import 'package:flutter_application_1/models/auth_model.dart';
 import 'package:flutter_application_1/providers/dio_provider.dart';
 import 'package:flutter_application_1/utils/config.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginForm extends StatefulWidget {
-const LoginForm({super.key});
-
+  const LoginForm({super.key});
 
   @override
   State<LoginForm> createState() => _LoginFormState();
@@ -63,23 +65,41 @@ class _LoginFormState extends State<LoginForm> {
             ),
           ),
           Config.spaceSmall,
-          Consumer<AuthModel>(
-            builder: (context, auth, child) {
-              return Button(
+          Consumer<AuthModel>(builder: (context, auth, child) {
+            return Button(
                 width: double.infinity,
                 title: 'Sign In',
                 onPressed: () async {
-                  final token  = await DioProvider().getToken(_emailController.text, _passController.text);
-                  if(token) {
-                    auth.loginSuccess();
-                   MyApp.navigatorKey.currentState!.pushNamed('main');
+                  final token = await DioProvider()
+                      .getToken(_emailController.text, _passController.text);
+                  if (token) {
+                    /*     auth.loginSuccess(); */
+                    final SharedPreferences prefs =
+                        await SharedPreferences.getInstance();
+                    final tokenValue = prefs.getString('token') ?? '';
+                    if (tokenValue.isNotEmpty && tokenValue != '') {
+                      final response = await DioProvider().getUser(tokenValue);
+                      if (response != null) {
+                        setState(() {
+                          Map<String, dynamic> appointment = {};
+                          final user = json.decode(response);
+                       
+                          for (var doctorData in user['doctor']) {
+                            if (doctorData['appointments'] != null) {
+                              appointment  = doctorData;
+                            }
+                          }
+                           auth.loginSuccess(user, appointment);
+                           MyApp.navigatorKey.currentState!.pushNamed('main');
+                        });
+                      }
+                    }
+                  
                   }
-                 /*  Navigator.of(context).pushNamed('main'); */
+                  /*  Navigator.of(context).pushNamed('main'); */
                 },
-                disable: false
-              );
-            }
-          )
+                disable: false);
+          })
         ],
       ),
     );

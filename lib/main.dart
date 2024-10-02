@@ -50,7 +50,7 @@ class MyApp extends StatelessWidget {
         routes: {
          '/': (context) => const AuthPage(),
          'main': (context) => const MainLayout(),
-         'doc_details': (context) => const DoctorDetails(),
+        /*  'doc_details': (context) => const DoctorDetails(), */
          'booking_page': (context) => const BookingPage(),
          'success_booking': (context) => const AppointmentBooked()
         },
