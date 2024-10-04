@@ -23,15 +23,8 @@ class _HomePageState extends State<HomePage> {
   List<dynamic> favList = [];
 
   List<Map<String, dynamic>> medCat = [
-    {
-      "icon": FontAwesomeIcons.userDoctor,
-      "category": "General",
-    },
-    {"icon": FontAwesomeIcons.heartPulse, "category": "Cardiology"},
-    {"icon": FontAwesomeIcons.lungs, "category": "Respirations"},
-    {"icon": FontAwesomeIcons.hand, "category": "Dermatology"},
-    {"icon": FontAwesomeIcons.personPregnant, "category": "Gynecology"},
-    {"icon": FontAwesomeIcons.teeth, "category": "Dental"}
+    
+    {"icon": FontAwesomeIcons.brain, "category": "Psiquiatra"},
   ];
 
   @override
@@ -64,17 +57,17 @@ class _HomePageState extends State<HomePage> {
                             style: const TextStyle(
                                 fontSize: 24, fontWeight: FontWeight.bold),
                           ),
-                          const SizedBox(
+                          SizedBox(
                             child: CircleAvatar(
                               radius: 30,
                               backgroundImage:
-                                  AssetImage('assets/profile1.jpg'),
+                                  NetworkImage('${user['profile_photo_url']}'),
                             ),
                           )
                         ],
                       ),
                       Config.spaceSmall,
-                      const Text('Category',
+                      const Text('Categoria',
                           style: TextStyle(
                               fontSize: 16, fontWeight: FontWeight.bold)),
                       Config.spaceSmall,
@@ -108,7 +101,7 @@ class _HomePageState extends State<HomePage> {
                                 );
                               }))),
                       Config.spaceSmall,
-                      const Text('Appointment Today',
+                      const Text('Agendamentos de Hoje',
                           style: TextStyle(
                               fontSize: 16, fontWeight: FontWeight.bold)),
                       Config.spaceSmall,
@@ -123,14 +116,14 @@ class _HomePageState extends State<HomePage> {
                               child: const Center(
                                 child: Padding(
                                   padding: EdgeInsets.all(20),
-                                  child: Text('No Appointment Today',
+                                  child: Text('Nenhum Agendamento Hoje',
                                       style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.w600)),
                                 ),
                               )),
                       Config.spaceSmall,
-                      const Text('Top Doctors',
+                      const Text('Melhores Doutores',
                           style: TextStyle(
                               fontSize: 16, fontWeight: FontWeight.bold)),
                       Config.spaceSmall,

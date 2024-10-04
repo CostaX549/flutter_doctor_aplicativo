@@ -7,7 +7,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 class DioProvider {
   Future<dynamic> getToken(String email, String password) async {
     try {
-      var response = await Dio().post("http://192.168.0.207/api/login",
+       var dio = Dio();
+
+     
+      dio.options.headers['Accept'] = 'application/json';
+      var response = await dio.post("http://192.168.0.207/api/login",
           data: {'email': email, 'password': password});
       if (response.statusCode == 200 && response.data != '') {
         final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -17,7 +21,19 @@ class DioProvider {
         return false;
       }
     } catch (error) {
-      return error;
+      // Captura de erros do Dio
+      if (error is DioException) {
+        if (error.response != null && error.response!.data != null) {
+          // Retorna a resposta do erro se houver detalhes específicos
+          return error.response!.data;
+        } else {
+          // Retorna uma mensagem de erro genérica de conexão
+          return 'Erro de conexão: ${error.message}';
+        }
+      } else {
+        // Retorna uma mensagem de erro genérica para outros tipos de erros
+        return 'Erro: $error';
+      }
     }
   }
 
@@ -35,8 +51,13 @@ class DioProvider {
 
   Future<dynamic> registerUser(
       String username, String email, String password) async {
+
     try {
-      var user = await Dio().post("http://192.168.0.207/api/register",
+           var dio = Dio();
+
+     
+      dio.options.headers['Accept'] = 'application/json';
+      var user = await dio.post("http://192.168.0.207/api/register",
           data: {'name': username, 'email': email, 'password': password});
 
       if (user.statusCode == 201 && user.data != '') {
@@ -45,7 +66,19 @@ class DioProvider {
         return false;
       }
     } catch (error) {
-      return error;
+      // Captura de erros do Dio
+      if (error is DioException) {
+        if (error.response != null && error.response!.data != null) {
+          // Retorna a resposta do erro se houver detalhes específicos
+          return error.response!.data;
+        } else {
+          // Retorna uma mensagem de erro genérica de conexão
+          return 'Erro de conexão: ${error.message}';
+        }
+      } else {
+        // Retorna uma mensagem de erro genérica para outros tipos de erros
+        return 'Erro: $error';
+      }
     }
   }
 
@@ -133,4 +166,45 @@ class DioProvider {
       return error;
     }
   }
+
+  Future<dynamic> storeToken(String firebaseToken, String token) async {
+    try {
+ var response = await Dio().post("http://192.168.0.207/api/token",
+ options: Options(headers: {'Authorization': 'Bearer $token'}),
+           data: {
+            'token': firebaseToken
+          }, 
+        );
+         if (response.statusCode == 200) {
+        return response.statusCode;
+      } else {
+        return 'Error';
+      }
+    } catch(error) {
+       return error;
+    }
+  }
+
+  Future<dynamic> socialLogin(String accessToken, String provider) async {
+  try {
+    var response = await Dio().post(
+      "http://192.168.0.207/api/social_login",
+      data: {
+        'access_token': accessToken,
+        'provider': provider,
+      },
+    );
+
+    if (response.statusCode == 200) {
+      // Salve o token no SharedPreferences
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString("token", response.data['data']['token']);
+      return true; // Login bem-sucedido
+    } else {
+      return false; // Falha no login
+    }
+  } catch (error) {
+    return error; // Retornar o erro, se ocorrer
+  }
+}
 }

@@ -77,7 +77,7 @@ class _AuthPageState extends State<AuthPage> {
                   ),
                 ),
                 Config.spaceSmall,
-                const Row(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
                     SocialButton(social: 'google'),
@@ -105,7 +105,7 @@ class _AuthPageState extends State<AuthPage> {
                         });
                       },
                       child: Text(
-                        isSignIn ? 'Sign Up' : 'Sign In',
+                        isSignIn ? 'Registrar' : 'Login',
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,

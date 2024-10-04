@@ -11,12 +11,12 @@ class AppointmentPage extends StatefulWidget {
   State<AppointmentPage> createState() => _AppointmentPageState();
 }
 
-enum FilterStatus { upcoming, complete, cancel }
+enum FilterStatus { futuro, completo, cancelado }
 
 
 
 class _AppointmentPageState extends State<AppointmentPage> {
-  FilterStatus status = FilterStatus.upcoming;
+  FilterStatus status = FilterStatus.futuro;
 Alignment _alignment = Alignment.centerLeft;
 List<dynamic> schedules = [
  
@@ -35,9 +35,9 @@ Future<void> getAppointments() async {
 }
 @override
 void initState() {
-     
+     super.initState(); 
   getAppointments();
- super.initState();
+
 
 }
   @override
@@ -45,14 +45,14 @@ void initState() {
     List<dynamic> filteredSchedules = schedules.where((var schedule) {
 
       switch (schedule['status']) {
-        case 'upcoming':
-          schedule['status'] = FilterStatus.upcoming;
+        case 'futuro':
+          schedule['status'] = FilterStatus.futuro;
           break;
-        case 'complete'  :
-        schedule['status'] = FilterStatus.complete;
+        case 'completo'  :
+        schedule['status'] = FilterStatus.completo;
           break;
-        case 'cancel'  :
-        schedule['status'] = FilterStatus.cancel;
+        case 'cancelado'  :
+        schedule['status'] = FilterStatus.cancelado;
           break;
       }
      
@@ -64,7 +64,7 @@ void initState() {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            const Text('Appointment Schedule', textAlign: TextAlign.center, style: TextStyle(
+            const Text('Agenda de Consultas', textAlign: TextAlign.center, style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold
             ),),
@@ -86,14 +86,14 @@ void initState() {
                       child: GestureDetector(
                         onTap: () {
                           setState(() {
-                            if(filterStatus == FilterStatus.upcoming) {
-                              status = FilterStatus.upcoming;
+                            if(filterStatus == FilterStatus.futuro) {
+                              status = FilterStatus.futuro;
                               _alignment = Alignment.centerLeft;
-                            } else if(filterStatus == FilterStatus.complete) {
-                               status = FilterStatus.complete;
+                            } else if(filterStatus == FilterStatus.completo) {
+                               status = FilterStatus.completo;
                               _alignment = Alignment.center;
-                            } else if(filterStatus == FilterStatus.cancel) {
-                               status = FilterStatus.cancel;
+                            } else if(filterStatus == FilterStatus.cancelado) {
+                               status = FilterStatus.cancelado;
                               _alignment = Alignment.centerRight;
                             }
                           });
@@ -190,7 +190,7 @@ void initState() {
                               Expanded( 
                                 child: OutlinedButton(
                                   onPressed: () {},
-                                  child: const Text('Cancel', style: TextStyle(color: Config.primaryColor))
+                                  child: const Text('Cancelar', style: TextStyle(color: Config.primaryColor))
                                 )
                               ),
                               const SizedBox(width:20,),
@@ -200,7 +200,7 @@ void initState() {
                                     backgroundColor: Config.primaryColor
                                   ),
                                   onPressed: () {},
-                                  child: const Text('Reschedule', style: TextStyle(color: Colors.white))
+                                  child: const Text('Reagendar', style: TextStyle(color: Colors.white))
                                 )
                               ),
                              ],

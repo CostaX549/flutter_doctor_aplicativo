@@ -36,19 +36,20 @@ return  Scaffold(
   bottomNavigationBar: BottomNavigationBar(
     currentIndex: currentPage,
     onTap: (page) {
-     setState(() {
-       currentPage = page;
-       _page.jumpToPage(
-        page, 
-      
-       );
-     });
+      setState(() {
+            currentPage = page;
+            _page.animateToPage(
+              page,
+              duration: const Duration(milliseconds: 500),
+              curve: Curves.easeInOut,
+            );
+          });
     },
     items: const <BottomNavigationBarItem>[
       BottomNavigationBarItem(icon: FaIcon(FontAwesomeIcons.houseChimneyMedical),label: 'Home'),
-      BottomNavigationBarItem(icon: FaIcon(FontAwesomeIcons.solidHeart),label: 'Favorite'),
-      BottomNavigationBarItem(icon: FaIcon(FontAwesomeIcons.solidCalendarCheck),label: 'Appointments'),
-      BottomNavigationBarItem(icon: FaIcon(FontAwesomeIcons.solidUser),label: 'Profile'),
+      BottomNavigationBarItem(icon: FaIcon(FontAwesomeIcons.solidHeart),label: 'Favoritos'),
+      BottomNavigationBarItem(icon: FaIcon(FontAwesomeIcons.solidCalendarCheck),label: 'Agendamentos'),
+      BottomNavigationBarItem(icon: FaIcon(FontAwesomeIcons.solidUser),label: 'Perfil'),
     ]
   ),
 );
